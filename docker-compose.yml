@@ -1,0 +1,68 @@
+services:
+  microservice-product:
+    image: product-service:latest
+    container_name: microservice-product
+    ports:
+      - "8081:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database-product:5432/invsis
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
+    networks:
+      - inventory-app
+      - product-net
+    depends_on:
+      - database-product
+
+  database-product:
+    image: postgres:17
+    container_name: database-product
+    environment:
+      POSTGRES_DB: invsis
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - product-data:/var/lib/postgresql/data
+    networks:
+      - product-net
+
+  microservice-stock:
+    image: stock-service:latest
+    container_name: microservice-stock
+    ports:
+      - "8082:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database-stock:5432/invsis
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
+    networks:
+      - inventory-app
+      - stock-net
+    depends_on:
+      - database-stock
+
+
+  database-stock:
+    image: postgres:17
+    container_name: database-stock
+    environment:
+      POSTGRES_DB: invsis
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - stock-data:/var/lib/postgresql/data
+    networks:
+      - stock-net
+
+volumes:
+  product-data:
+  stock-data:
+
+networks:
+  inventory-app: {}
+  product-net:
+    internal: true
+  stock-net:
+    internal: true
