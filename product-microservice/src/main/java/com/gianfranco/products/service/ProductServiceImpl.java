@@ -37,7 +37,12 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public void deleteProduct(Long id) {
+    public Product deleteProduct(Long id) {
+        Product product = productRepository.findById(id).orElse(null);
+        if (product == null) {
+            throw new IllegalArgumentException("Product with id " + id + " not found");
+        }
         productRepository.deleteById(id);
+        return product;
     }
 }
