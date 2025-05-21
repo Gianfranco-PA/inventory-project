@@ -1,5 +1,8 @@
 package com.gianfranco.stock.controller;
 
+import com.gianfranco.stock.dto.MovementDTO;
+import com.gianfranco.stock.dto.StockDTO;
+import com.gianfranco.stock.map.Mapper;
 import com.gianfranco.stock.model.Movement;
 import com.gianfranco.stock.model.Stock;
 import com.gianfranco.stock.service.IStockService;
@@ -12,24 +15,28 @@ import java.util.List;
 public class StockController {
 
     private final IStockService stockService;
+    private final Mapper mapper;
 
-    public StockController(IStockService stockService) {
+    public StockController(IStockService stockService, Mapper mapper) {
         this.stockService = stockService;
+        this.mapper = mapper;
     }
 
     @GetMapping
-    public List<Stock> getAllStocks() {
-        return stockService.getAllStocks();
+    public List<StockDTO> getAllStocks() {
+        return stockService.getAllStocks().stream().map(mapper::toStockDTO).toList();
     }
 
     @GetMapping("/{id}")
-    public Stock getStockByProductId(@PathVariable Long id) {
-        return stockService.getStockByProductId(id);
+    public StockDTO getStockByProductId(@PathVariable Long id) {
+        return mapper.toStockDTO(stockService.getStockByProductId(id));
     }
 
     @PostMapping("/{id}")
-    public Stock addMovement(@PathVariable Long id, @RequestBody Movement movement) {
-        return this.stockService.addMovement(id, movement);
+    public StockDTO addMovement(@PathVariable Long id, @RequestBody MovementDTO movement) {
+        Movement mappedMovement = mapper.toMovement(movement);
+        Stock stock = stockService.addMovement(id, mappedMovement);
+        return mapper.toStockDTO(stock);
     }
 
 

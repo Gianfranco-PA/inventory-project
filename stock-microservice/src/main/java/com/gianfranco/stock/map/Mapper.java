@@ -1,0 +1,44 @@
+package com.gianfranco.stock.map;
+
+import com.gianfranco.stock.dto.MovementDTO;
+import com.gianfranco.stock.dto.StockDTO;
+import com.gianfranco.stock.model.Movement;
+import com.gianfranco.stock.model.Stock;
+import org.springframework.stereotype.Component;
+
+@Component
+public class Mapper {
+
+    public MovementDTO toMovementDTO(Movement movement) {
+        return new MovementDTO(
+                movement.getAmount(),
+                movement.getDescription(),
+                movement.getDate());
+
+    }
+
+    public StockDTO toStockDTO(Stock stock) {
+        return new StockDTO(
+                stock.getId(),
+                stock.getQuantity(),
+                stock.getLastUpdate(),
+                stock.getMovements().stream().map(this::toMovementDTO).toList());
+    }
+
+    public Movement toMovement(MovementDTO movementDTO) {
+        Movement movement = new Movement();
+        movement.setAmount(movementDTO.amount());
+        movement.setDescription(movementDTO.description());
+        movement.setDate(movementDTO.date());
+        return movement;
+    }
+
+    public Stock toStock(StockDTO stockDTO) {
+        Stock stock = new Stock();
+        stock.setId(stockDTO.productId());
+        stock.setQuantity(stockDTO.quantity());
+        stock.setLastUpdate(stockDTO.lastUpdate());
+        stock.setMovements(stockDTO.movements().stream().map(this::toMovement).toList());
+        return stock;
+    }
+}
