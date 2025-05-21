@@ -1,6 +1,7 @@
 package com.gianfranco.stock.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -15,11 +16,14 @@ public class Movement {
     @ManyToOne(optional = false)
     private Stock stock;
 
-    private Long amount;
+    @Column(nullable = false)
+    private Long amount = 0L;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @CreationTimestamp
+    @Column(nullable = false)
     private LocalDateTime date;
 
     public Movement() {

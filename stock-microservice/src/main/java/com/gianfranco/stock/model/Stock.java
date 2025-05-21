@@ -1,6 +1,7 @@
 package com.gianfranco.stock.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,15 +15,17 @@ public class Stock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "product_id")
+    @Column(name = "product_id", nullable = false)
     private Long productId;
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Movement> movements = new ArrayList<>();
 
-    private Long quantity;
+    @Column(nullable = false)
+    private Long quantity = 0L;
 
-    @Column(name = "last_update")
+    @UpdateTimestamp
+    @Column(name = "last_update", nullable = false)
     private LocalDateTime lastUpdate;
 
     public Stock() {

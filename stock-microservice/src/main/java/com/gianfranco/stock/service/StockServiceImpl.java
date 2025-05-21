@@ -32,7 +32,6 @@ public class StockServiceImpl implements IStockService {
         Stock stock = this.stockRepository.findById(product_id).orElseGet(() -> {
             Stock newStock = new Stock();
             newStock.setProductId(product_id);
-            newStock.setQuantity(0L);
             return newStock;
         });
         movement.setStock(stock);
