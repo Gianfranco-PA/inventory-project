@@ -1,5 +1,8 @@
 services:
   microservice-product:
+    build:
+      context: .
+      dockerfile: product-microservice/Dockerfile
     image: product-service:latest
     container_name: microservice-product
     ports:
@@ -28,6 +31,9 @@ services:
       - product-net
 
   microservice-stock:
+    build:
+      context: .
+      dockerfile: stock-microservice/Dockerfile
     image: stock-service:latest
     container_name: microservice-stock
     ports:
