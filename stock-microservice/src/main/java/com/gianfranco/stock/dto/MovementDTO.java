@@ -7,9 +7,7 @@ import java.time.LocalDateTime;
 public record MovementDTO(
         @NonNull
         Long amount,
-        @NonNull
         String description,
-        @NonNull
         LocalDateTime date
 ) {
 }
