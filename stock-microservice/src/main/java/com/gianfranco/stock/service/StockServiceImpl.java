@@ -4,6 +4,7 @@ import com.gianfranco.stock.model.Movement;
 import com.gianfranco.stock.model.Stock;
 import com.gianfranco.stock.repository.IStockRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,7 +29,7 @@ public class StockServiceImpl implements IStockService {
     }
 
     @Override
-    public Stock addMovement(Long product_id, Movement movement) {
+    public Stock addMovement(Long product_id, @Validated Movement movement) {
         Stock stock = this.stockRepository.findById(product_id).orElseGet(() -> {
             Stock newStock = new Stock();
             newStock.setProductId(product_id);

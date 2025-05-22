@@ -1,10 +1,11 @@
 package com.gianfranco.products.controller;
 
+import com.gianfranco.products.dto.product.CreateProductDTO;
 import com.gianfranco.products.dto.product.ProductDTO;
-import com.gianfranco.products.map.Mapper;
-import com.gianfranco.products.model.Product;
+import com.gianfranco.products.dto.product.ProductStockDTO;
 import com.gianfranco.products.service.IProductService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -31,14 +32,14 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO product) {
-        ProductDTO savedProduct = productService.createProduct(product);
-        URI location = URI.create("/api/product/" + savedProduct.id());
+    public ResponseEntity<ProductStockDTO> createProduct(@RequestBody @Validated CreateProductDTO product) {
+        ProductStockDTO savedProduct = productService.createProduct(product);
+        URI location = URI.create("/api/product/" + savedProduct.product().id());
         return ResponseEntity.created(location).body(savedProduct);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody ProductDTO product) {
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody @Validated ProductDTO product) {
         return ResponseEntity.ok(productService.updateProduct(id, product));
     }
 

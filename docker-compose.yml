@@ -12,6 +12,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://database-product:5432/invsis
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=admin
+      - STOCK_SERVICE_URL=http://microservice-stock:8080
     networks:
       - inventory-app
       - product-net

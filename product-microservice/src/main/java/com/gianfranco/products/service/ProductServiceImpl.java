@@ -1,7 +1,10 @@
 package com.gianfranco.products.service;
 
 import com.gianfranco.products.client.StockClient;
+import com.gianfranco.products.dto.product.CreateProductDTO;
 import com.gianfranco.products.dto.product.ProductDTO;
+import com.gianfranco.products.dto.product.ProductStockDTO;
+import com.gianfranco.products.dto.stock.StockDTO;
 import com.gianfranco.products.map.Mapper;
 import com.gianfranco.products.model.Product;
 import com.gianfranco.products.repository.IProductRepository;
@@ -36,10 +39,18 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public ProductDTO createProduct(ProductDTO product) {
-        Product mappedProduct = mapper.toProduct(product);
-        productRepository.save(mappedProduct);
-        return mapper.toProductDTO(mappedProduct);
+    public ProductStockDTO createProduct(CreateProductDTO product) {
+        Product savedProduct = productRepository.save(mapper.toProduct(product));
+
+        StockDTO savedStock;
+        try {
+            savedStock = stockClient.createInitially(savedProduct.getId(), product.initialStock());
+        } catch (Exception e) {
+            productRepository.deleteById(savedProduct.getId());
+            throw new RuntimeException("Error creating stock for product " + savedProduct.getName(), e);
+        }
+
+        return mapper.toProductStockDTO(savedProduct, savedStock);
     }
 
     @Override

@@ -1,10 +1,11 @@
 package com.gianfranco.products.dto.product;
 
+import org.springframework.lang.NonNull;
+
 public record CreateProductDTO(
-        Long id,
-        String name,
-        String description,
-        Double price,
+        @NonNull
+        ProductDTO product,
+        @NonNull
         Long initialStock
 )
 {
