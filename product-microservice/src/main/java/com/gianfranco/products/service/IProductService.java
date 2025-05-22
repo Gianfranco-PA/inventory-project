@@ -1,18 +1,19 @@
 package com.gianfranco.products.service;
 
+import com.gianfranco.products.dto.product.ProductDTO;
 import com.gianfranco.products.model.Product;
 
 import java.util.List;
 
 public interface IProductService {
 
-    List<Product> getAllProducts();
+    List<ProductDTO> getAllProducts();
 
-    Product getProductById(Long id);
+    ProductDTO getProductById(Long id);
 
-    Product createProduct(Product product);
+    ProductDTO createProduct(ProductDTO product);
 
-    Product updateProduct(Long id,Product product);
+    ProductDTO updateProduct(Long id,ProductDTO product);
 
-    Product deleteProduct(Long id);
+    ProductDTO deleteProduct(Long id);
 }

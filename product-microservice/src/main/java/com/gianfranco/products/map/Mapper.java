@@ -1,6 +1,6 @@
 package com.gianfranco.products.map;
 
-import com.gianfranco.products.dto.ProductDTO;
+import com.gianfranco.products.dto.product.ProductDTO;
 import com.gianfranco.products.model.Product;
 import org.springframework.stereotype.Component;
 
