@@ -85,6 +85,7 @@ public class Stock {
     public void addMovement(Movement movement) {
         this.movements.add(movement);
         this.quantity += movement.getAmount();
+        movement.setStock(this);
     }
 
     public void removeMovement(Movement movement) {
