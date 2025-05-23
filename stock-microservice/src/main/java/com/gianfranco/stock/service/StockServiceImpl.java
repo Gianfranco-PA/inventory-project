@@ -1,5 +1,6 @@
 package com.gianfranco.stock.service;
 
+import com.gianfranco.stock.client.ProductClient;
 import com.gianfranco.stock.dto.stock.MovementDTO;
 import com.gianfranco.stock.dto.stock.StockDTO;
 import com.gianfranco.stock.map.Mapper;
@@ -16,10 +17,12 @@ import java.util.stream.StreamSupport;
 public class StockServiceImpl implements IStockService {
 
     private final IStockRepository stockRepository;
+    private final ProductClient productClient;
     private final Mapper mapper;
 
-    public StockServiceImpl(IStockRepository stockRepository, Mapper mapper) {
+    public StockServiceImpl(IStockRepository stockRepository, ProductClient productClient ,Mapper mapper) {
         this.stockRepository = stockRepository;
+        this.productClient = productClient;
         this.mapper = mapper;
     }
 
@@ -37,6 +40,15 @@ public class StockServiceImpl implements IStockService {
 
     @Override
     public StockDTO addMovement(Long productId, @Validated MovementDTO movement) {
+
+        try {
+            if (!productClient.isProductExists(productId)) {
+                throw new IllegalArgumentException("Product with id " + productId + " not found");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error getting product with id " + productId, e);
+        }
+
         Movement mappedMovement = mapper.toMovement(movement);
         Stock stock = this.stockRepository.findById(productId).orElseGet(() -> {
             Stock newStock = new Stock();

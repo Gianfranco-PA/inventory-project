@@ -9,6 +9,8 @@ import com.gianfranco.products.map.Mapper;
 import com.gianfranco.products.model.Product;
 import com.gianfranco.products.repository.IProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.List;
 import java.util.stream.StreamSupport;
@@ -20,10 +22,14 @@ public class ProductServiceImpl implements IProductService {
     private final StockClient stockClient;
     private final Mapper mapper;
 
-    public ProductServiceImpl(IProductRepository productRepository, StockClient stockClient, Mapper mapper) {
+    private final TransactionTemplate txTemplate;
+
+    public ProductServiceImpl(IProductRepository productRepository, StockClient stockClient, Mapper mapper, PlatformTransactionManager txManager) {
         this.productRepository = productRepository;
         this.stockClient = stockClient;
         this.mapper = mapper;
+
+        this.txTemplate = new TransactionTemplate(txManager);
     }
 
     @Override
@@ -40,7 +46,12 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public ProductStockDTO createProduct(CreateProductDTO product) {
-        Product savedProduct = productRepository.save(mapper.toProduct(product));
+        Product mappedProduct = mapper.toProduct(product);
+        Product savedProduct = txTemplate.execute(status -> productRepository.save(mappedProduct));
+
+        if(savedProduct == null) {
+            throw new RuntimeException("Error saving product");
+        }
 
         StockDTO savedStock;
         try {
