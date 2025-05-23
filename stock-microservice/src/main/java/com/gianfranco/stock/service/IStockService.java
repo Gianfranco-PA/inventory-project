@@ -1,14 +1,14 @@
 package com.gianfranco.stock.service;
 
-import com.gianfranco.stock.model.Movement;
-import com.gianfranco.stock.model.Stock;
+import com.gianfranco.stock.dto.stock.MovementDTO;
+import com.gianfranco.stock.dto.stock.StockDTO;
 
 import java.util.List;
 
 public interface IStockService {
-    List<Stock> getAllStocks();
+    List<StockDTO> getAllStocks();
 
-    Stock getStockByProductId(Long product_id);
+    StockDTO getStockByProductId(Long productId);
 
-    Stock addMovement(Long product_id, Movement movement);
+    StockDTO addMovement(Long productId, MovementDTO movement);
 }

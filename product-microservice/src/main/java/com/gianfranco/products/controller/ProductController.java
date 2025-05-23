@@ -1,10 +1,11 @@
 package com.gianfranco.products.controller;
 
-import com.gianfranco.products.dto.ProductDTO;
-import com.gianfranco.products.map.Mapper;
-import com.gianfranco.products.model.Product;
+import com.gianfranco.products.dto.product.CreateProductDTO;
+import com.gianfranco.products.dto.product.ProductDTO;
+import com.gianfranco.products.dto.product.ProductStockDTO;
 import com.gianfranco.products.service.IProductService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -15,39 +16,35 @@ import java.util.List;
 public class ProductController {
 
     private final IProductService productService;
-    private final Mapper mapper;
 
-    public ProductController(IProductService productService, Mapper mapper) {
+    public ProductController(IProductService productService) {
         this.productService = productService;
-        this.mapper = mapper;
     }
 
     @GetMapping
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
-        return ResponseEntity.ok(productService.getAllProducts().stream().map(mapper::toProductDTO).toList());
+        return ResponseEntity.ok(productService.getAllProducts());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
-        return ResponseEntity.ok(mapper.toProductDTO(productService.getProductById(id)));
+        return ResponseEntity.ok(productService.getProductById(id));
     }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO product) {
-        Product productModel = mapper.toProduct(product);
-        Product savedProduct = productService.createProduct(productModel);
-        URI location = URI.create("/api/product/" + savedProduct.getId());
-        return ResponseEntity.created(location).body(mapper.toProductDTO(savedProduct));
+    public ResponseEntity<ProductStockDTO> createProduct(@RequestBody @Validated CreateProductDTO product) {
+        ProductStockDTO savedProduct = productService.createProduct(product);
+        URI location = URI.create("/api/product/" + savedProduct.product().id());
+        return ResponseEntity.created(location).body(savedProduct);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody ProductDTO product) {
-        Product mappedProduct = mapper.toProduct(product);
-        return ResponseEntity.ok(mapper.toProductDTO(productService.updateProduct(id, mappedProduct)));
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody @Validated ProductDTO product) {
+        return ResponseEntity.ok(productService.updateProduct(id, product));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ProductDTO> deleteProduct(@PathVariable Long id) {
-        return ResponseEntity.ok(mapper.toProductDTO(productService.deleteProduct(id)));
+        return ResponseEntity.ok(productService.deleteProduct(id));
     }
 }

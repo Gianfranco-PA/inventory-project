@@ -1,43 +1,62 @@
 package com.gianfranco.stock.service;
 
+import com.gianfranco.stock.client.ProductClient;
+import com.gianfranco.stock.dto.stock.MovementDTO;
+import com.gianfranco.stock.dto.stock.StockDTO;
+import com.gianfranco.stock.map.Mapper;
 import com.gianfranco.stock.model.Movement;
 import com.gianfranco.stock.model.Stock;
 import com.gianfranco.stock.repository.IStockRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 @Service
 public class StockServiceImpl implements IStockService {
 
     private final IStockRepository stockRepository;
+    private final ProductClient productClient;
+    private final Mapper mapper;
 
-    public StockServiceImpl(IStockRepository stockRepository) {
+    public StockServiceImpl(IStockRepository stockRepository, ProductClient productClient ,Mapper mapper) {
         this.stockRepository = stockRepository;
+        this.productClient = productClient;
+        this.mapper = mapper;
     }
 
     @Override
-    public List<Stock> getAllStocks() {
-        return (List<Stock>) this.stockRepository.findAll();
+    public List<StockDTO> getAllStocks() {
+        return StreamSupport.stream(stockRepository.findAll().spliterator(), false)
+                .map(mapper::toStockDTO)
+                .toList();
     }
 
     @Override
-    public Stock getStockByProductId(Long product_id) {
-        return this.stockRepository.findById(product_id).orElse(null);
+    public StockDTO getStockByProductId(Long productId) {
+        return this.stockRepository.findById(productId).map(mapper::toStockDTO).orElse(null);
     }
 
     @Override
-    public Stock addMovement(Long product_id, Movement movement) {
-        Stock stock = this.stockRepository.findById(product_id).orElseGet(() -> {
+    public StockDTO addMovement(Long productId, @Validated MovementDTO movement) {
+
+        try {
+            if (!productClient.isProductExists(productId)) {
+                throw new IllegalArgumentException("Product with id " + productId + " not found");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error getting product with id " + productId, e);
+        }
+
+        Movement mappedMovement = mapper.toMovement(movement);
+        Stock stock = this.stockRepository.findById(productId).orElseGet(() -> {
             Stock newStock = new Stock();
-            newStock.setProductId(product_id);
+            newStock.setProductId(productId);
             return newStock;
         });
-        movement.setStock(stock);
-        stock.addMovement(movement);
-        stock.setLastUpdate(LocalDateTime.now());
-        this.stockRepository.save(stock);
-        return stock;
+        stock.addMovement(mappedMovement);
+        Stock savedStock = this.stockRepository.save(stock);
+        return mapper.toStockDTO(savedStock);
     }
 }

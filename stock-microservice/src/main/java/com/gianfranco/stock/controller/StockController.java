@@ -1,11 +1,9 @@
 package com.gianfranco.stock.controller;
 
-import com.gianfranco.stock.dto.MovementDTO;
-import com.gianfranco.stock.dto.StockDTO;
-import com.gianfranco.stock.map.Mapper;
-import com.gianfranco.stock.model.Movement;
-import com.gianfranco.stock.model.Stock;
+import com.gianfranco.stock.dto.stock.MovementDTO;
+import com.gianfranco.stock.dto.stock.StockDTO;
 import com.gianfranco.stock.service.IStockService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,28 +13,24 @@ import java.util.List;
 public class StockController {
 
     private final IStockService stockService;
-    private final Mapper mapper;
 
-    public StockController(IStockService stockService, Mapper mapper) {
+    public StockController(IStockService stockService) {
         this.stockService = stockService;
-        this.mapper = mapper;
     }
 
     @GetMapping
-    public List<StockDTO> getAllStocks() {
-        return stockService.getAllStocks().stream().map(mapper::toStockDTO).toList();
+    public ResponseEntity<List<StockDTO>> getAllStocks() {
+        return ResponseEntity.ok(stockService.getAllStocks());
     }
 
     @GetMapping("/{id}")
-    public StockDTO getStockByProductId(@PathVariable Long id) {
-        return mapper.toStockDTO(stockService.getStockByProductId(id));
+    public ResponseEntity<StockDTO> getStockByProductId(@PathVariable Long id) {
+        return ResponseEntity.ok(stockService.getStockByProductId(id));
     }
 
     @PostMapping("/{id}")
-    public StockDTO addMovement(@PathVariable Long id, @RequestBody MovementDTO movement) {
-        Movement mappedMovement = mapper.toMovement(movement);
-        Stock stock = stockService.addMovement(id, mappedMovement);
-        return mapper.toStockDTO(stock);
+    public ResponseEntity<StockDTO> addMovement(@PathVariable Long id, @RequestBody MovementDTO movement) {
+        return ResponseEntity.ok(stockService.addMovement(id, movement));
     }
 
 

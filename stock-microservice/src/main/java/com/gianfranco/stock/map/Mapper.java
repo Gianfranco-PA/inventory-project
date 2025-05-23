@@ -1,10 +1,12 @@
 package com.gianfranco.stock.map;
 
-import com.gianfranco.stock.dto.MovementDTO;
-import com.gianfranco.stock.dto.StockDTO;
+import com.gianfranco.stock.dto.stock.MovementDTO;
+import com.gianfranco.stock.dto.stock.StockDTO;
 import com.gianfranco.stock.model.Movement;
 import com.gianfranco.stock.model.Stock;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 @Component
 public class Mapper {
@@ -29,7 +31,7 @@ public class Mapper {
         Movement movement = new Movement();
         movement.setAmount(movementDTO.amount());
         movement.setDescription(movementDTO.description());
-        movement.setDate(movementDTO.date());
+        movement.setDate(movementDTO.date() != null ? movementDTO.date(): LocalDateTime.now());
         return movement;
     }
 
