@@ -22,7 +22,6 @@ public class StockClient {
 
     public StockDTO createInitially(Long productId, long quantity) {
         MovementDTO movementDTO = new MovementDTO(quantity, "Initial stock", LocalDateTime.now());
-        System.out.println(url + "/api/stock/{id}");
-        return restTemplate.postForObject(url + "/api/stock/{id}", movementDTO, StockDTO.class, productId);
+        return restTemplate.postForObject(url + "/{id}", movementDTO, StockDTO.class, productId);
     }
 }

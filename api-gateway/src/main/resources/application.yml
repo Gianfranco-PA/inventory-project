@@ -10,12 +10,12 @@ spring:
       mvc:
         routes:
           - id: product
-            uri: lb://api/product
+            uri: lb://product-service
             predicates:
               - Path=/api/product/**
 
           - id: stock
-            uri: lb://api/stock
+            uri: lb://stock-service
             predicates:
               - Path=/api/stock/**
 

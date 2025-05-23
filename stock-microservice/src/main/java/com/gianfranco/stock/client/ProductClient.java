@@ -20,7 +20,7 @@ public class ProductClient {
     }
 
     public boolean isProductExists(Long productId) {
-        ProductDTO product = restTemplate.getForObject(url + "/api/product/{id}", ProductDTO.class, productId);
+        ProductDTO product = restTemplate.getForObject(url + "/{id}", ProductDTO.class, productId);
         return product != null && Objects.equals(product.id(), productId);
     }
 }
