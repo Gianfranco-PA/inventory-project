@@ -1,7 +1,7 @@
 package com.gianfranco.stock.map;
 
-import com.gianfranco.stock.dto.MovementDTO;
-import com.gianfranco.stock.dto.StockDTO;
+import com.gianfranco.stock.dto.stock.MovementDTO;
+import com.gianfranco.stock.dto.stock.StockDTO;
 import com.gianfranco.stock.model.Movement;
 import com.gianfranco.stock.model.Stock;
 import org.springframework.stereotype.Component;

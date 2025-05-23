@@ -1,4 +1,4 @@
-package com.gianfranco.stock.dto;
+package com.gianfranco.stock.dto.stock;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

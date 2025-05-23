@@ -1,7 +1,7 @@
 package com.gianfranco.stock.controller;
 
-import com.gianfranco.stock.dto.MovementDTO;
-import com.gianfranco.stock.dto.StockDTO;
+import com.gianfranco.stock.dto.stock.MovementDTO;
+import com.gianfranco.stock.dto.stock.StockDTO;
 import com.gianfranco.stock.service.IStockService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

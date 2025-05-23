@@ -1,7 +1,7 @@
 package com.gianfranco.stock.service;
 
-import com.gianfranco.stock.dto.MovementDTO;
-import com.gianfranco.stock.dto.StockDTO;
+import com.gianfranco.stock.dto.stock.MovementDTO;
+import com.gianfranco.stock.dto.stock.StockDTO;
 
 import java.util.List;
 
