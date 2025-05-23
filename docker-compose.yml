@@ -18,6 +18,7 @@ services:
       - product-net
     depends_on:
       - database-product
+      - eureka-server
 
   database-product:
     image: postgres:17
@@ -50,6 +51,7 @@ services:
       - stock-net
     depends_on:
       - database-stock
+      - eureka-server
 
 
   database-stock:
