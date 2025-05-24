@@ -3,6 +3,7 @@ package com.gianfranco.stock.service;
 import com.gianfranco.stock.client.ProductClient;
 import com.gianfranco.stock.dto.stock.MovementDTO;
 import com.gianfranco.stock.dto.stock.StockDTO;
+import com.gianfranco.stock.dto.stock.StockMovementsDTO;
 import com.gianfranco.stock.map.Mapper;
 import com.gianfranco.stock.model.Movement;
 import com.gianfranco.stock.model.Stock;
@@ -35,7 +36,16 @@ public class StockServiceImpl implements IStockService {
 
     @Override
     public StockDTO getStockByProductId(Long productId) {
-        return this.stockRepository.findById(productId).map(mapper::toStockDTO).orElse(null);
+        return this.stockRepository.findById(productId).map(mapper::toStockDTO).orElseThrow(
+                () -> new IllegalArgumentException("Stock with id " + productId + " not found")
+        );
+    }
+
+    @Override
+    public StockMovementsDTO getStockMovementsByProductId(Long productId) {
+        return this.stockRepository.findById(productId).map(mapper::toStockMovementDTO).orElseThrow(
+                () -> new IllegalArgumentException("Stock with id " + productId + " not found")
+        );
     }
 
     @Override
