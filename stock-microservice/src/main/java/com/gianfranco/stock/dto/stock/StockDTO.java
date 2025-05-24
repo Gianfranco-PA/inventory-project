@@ -1,17 +1,16 @@
 package com.gianfranco.stock.dto.stock;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public record StockDTO(
+        @JsonIgnore
         Long productId,
         Long quantity,
 
         @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-        LocalDateTime lastUpdate,
-
-        List<MovementDTO> movements
+        LocalDateTime lastUpdate
 ) {
 }

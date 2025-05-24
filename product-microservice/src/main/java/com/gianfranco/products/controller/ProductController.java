@@ -3,6 +3,7 @@ package com.gianfranco.products.controller;
 import com.gianfranco.products.dto.product.CreateProductDTO;
 import com.gianfranco.products.dto.product.ProductDTO;
 import com.gianfranco.products.dto.product.ProductStockDTO;
+import com.gianfranco.products.dto.product.ProductTrackDTO;
 import com.gianfranco.products.service.IProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -29,6 +30,16 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
         return ResponseEntity.ok(productService.getProductById(id));
+    }
+
+    @GetMapping("/{id}/stock")
+    public ResponseEntity<ProductStockDTO> getProductStockById(@PathVariable Long id) {
+        return ResponseEntity.ok(productService.getProductStockById(id));
+    }
+
+    @GetMapping("/{id}/track")
+    public ResponseEntity<ProductTrackDTO> getProductTrackById(@PathVariable Long id) {
+        return ResponseEntity.ok(productService.getProductTrackById(id));
     }
 
     @PostMapping

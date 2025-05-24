@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: product-microservice/Dockerfile
-    image: product-service:latest
+    image: sisinv-product-service:latest
     container_name: microservice-product
     ports:
       - "8081:8080"
@@ -12,12 +12,13 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://database-product:5432/invsis
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=admin
-      - STOCK_SERVICE_URL=http://microservice-stock:8080
+      - STOCK_SERVICE_URL=http://api-gateway:8080/api/stock
     networks:
       - inventory-app
       - product-net
     depends_on:
       - database-product
+      - eureka-server
 
   database-product:
     image: postgres:17
@@ -35,7 +36,7 @@ services:
     build:
       context: .
       dockerfile: stock-microservice/Dockerfile
-    image: stock-service:latest
+    image: sisinv-stock-service:latest
     container_name: microservice-stock
     ports:
       - "8082:8080"
@@ -44,12 +45,13 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://database-stock:5432/invsis
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=admin
-      - PRODUCT_SERVICE_URL=http://microservice-product:8080
+      - PRODUCT_SERVICE_URL=http://api-gateway:8080/api/product
     networks:
       - inventory-app
       - stock-net
     depends_on:
       - database-stock
+      - eureka-server
 
 
   database-stock:
@@ -63,6 +65,32 @@ services:
       - stock-data:/var/lib/postgresql/data
     networks:
       - stock-net
+
+  eureka-server:
+    build:
+      context: .
+      dockerfile: eureka-server/Dockerfile
+    image: sisinv-eureka-server:latest
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - inventory-app
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: api-gateway/Dockerfile
+    image: sisinv-api-gateway:latest
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    networks:
+      - inventory-app
+    depends_on:
+      - eureka-server
+      - microservice-product
+      - microservice-stock
 
 volumes:
   product-data:

@@ -19,6 +19,8 @@
 	<modules>
 		<module>product-microservice</module>
 		<module>stock-microservice</module>
+		<module>api-gateway</module>
+		<module>eureka-server</module>
 	</modules>
 
 	<properties>

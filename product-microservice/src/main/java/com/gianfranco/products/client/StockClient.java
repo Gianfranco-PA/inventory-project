@@ -2,6 +2,7 @@ package com.gianfranco.products.client;
 
 import com.gianfranco.products.dto.stock.MovementDTO;
 import com.gianfranco.products.dto.stock.StockDTO;
+import com.gianfranco.products.dto.stock.StockMovementsDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
@@ -22,7 +23,14 @@ public class StockClient {
 
     public StockDTO createInitially(Long productId, long quantity) {
         MovementDTO movementDTO = new MovementDTO(quantity, "Initial stock", LocalDateTime.now());
-        System.out.println(url + "/api/stock/{id}");
-        return restTemplate.postForObject(url + "/api/stock/{id}", movementDTO, StockDTO.class, productId);
+        return restTemplate.postForObject(url + "/{id}", movementDTO, StockDTO.class, productId);
+    }
+
+    public StockDTO getStock(Long productId) {
+        return restTemplate.getForObject(url + "/{id}", StockDTO.class, productId);
+    }
+
+    public StockMovementsDTO getMovements(Long productId) {
+        return restTemplate.getForObject(url + "/{id}/movements", StockMovementsDTO.class, productId);
     }
 }
