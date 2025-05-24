@@ -29,9 +29,6 @@ public class Mapper {
 
     public StockMovementsDTO toStockMovementDTO(Stock stock) {
         return new StockMovementsDTO(
-                stock.getId(),
-                stock.getQuantity(),
-                stock.getLastUpdate(),
                 stock.getMovements().stream().map(this::toMovementDTO).toList());
     }
 

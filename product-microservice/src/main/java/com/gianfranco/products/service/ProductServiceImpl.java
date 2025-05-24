@@ -4,7 +4,9 @@ import com.gianfranco.products.client.StockClient;
 import com.gianfranco.products.dto.product.CreateProductDTO;
 import com.gianfranco.products.dto.product.ProductDTO;
 import com.gianfranco.products.dto.product.ProductStockDTO;
+import com.gianfranco.products.dto.product.ProductTrackDTO;
 import com.gianfranco.products.dto.stock.StockDTO;
+import com.gianfranco.products.dto.stock.StockMovementsDTO;
 import com.gianfranco.products.map.Mapper;
 import com.gianfranco.products.model.Product;
 import com.gianfranco.products.repository.IProductRepository;
@@ -41,7 +43,45 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public ProductDTO getProductById(Long id) {
-        return productRepository.findById(id).map(mapper::toProductDTO).orElse(null);
+        return productRepository.findById(id).map(mapper::toProductDTO).orElseThrow(
+                () -> new IllegalArgumentException("Product with id " + id + " not found")
+        );
+    }
+
+    @Override
+    public ProductStockDTO getProductStockById(Long id) {
+
+        Product product = productRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("Product with id " + id + " not found")
+        );
+
+        StockDTO stockDTO;
+
+        try{
+            stockDTO = stockClient.getStock(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Error getting stock for product " + product.getName(), e);
+        }
+
+        return mapper.toProductStockDTO(product, stockDTO);
+    }
+
+    @Override
+    public ProductTrackDTO getProductTrackById(Long id) {
+        Product product = productRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("Product with id " + id + " not found")
+        );
+
+        StockDTO stockDTO;
+        StockMovementsDTO movementsDTO;
+
+        try{
+            stockDTO = stockClient.getStock(id);
+            movementsDTO = stockClient.getMovements(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Error getting track for product " + product.getName(), e);
+        }
+        return mapper.toProductTrackDTO(product, stockDTO, movementsDTO);
     }
 
     @Override

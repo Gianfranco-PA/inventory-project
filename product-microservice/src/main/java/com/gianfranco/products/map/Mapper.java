@@ -3,7 +3,9 @@ package com.gianfranco.products.map;
 import com.gianfranco.products.dto.product.CreateProductDTO;
 import com.gianfranco.products.dto.product.ProductDTO;
 import com.gianfranco.products.dto.product.ProductStockDTO;
+import com.gianfranco.products.dto.product.ProductTrackDTO;
 import com.gianfranco.products.dto.stock.StockDTO;
+import com.gianfranco.products.dto.stock.StockMovementsDTO;
 import com.gianfranco.products.model.Product;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +35,10 @@ public class Mapper {
 
     public ProductStockDTO toProductStockDTO(Product product, StockDTO stock){
         return new ProductStockDTO(toProductDTO(product), stock);
+    }
+
+    public ProductTrackDTO toProductTrackDTO(Product product, StockDTO stock, StockMovementsDTO movements){
+        return new ProductTrackDTO(toProductDTO(product), stock, movements.movements());
     }
 
 }

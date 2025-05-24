@@ -1,4 +1,4 @@
-package com.gianfranco.stock.dto.stock;
+package com.gianfranco.products.dto.stock;
 
 import java.util.List;
 
