@@ -106,10 +106,12 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public ProductDTO updateProduct(Long id ,ProductDTO product) {
+        productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Product with id " + id + " not found"));
+
         Product mappedProduct = mapper.toProduct(product);
         mappedProduct.setId(id);
-        productRepository.save(mappedProduct);
-        return mapper.toProductDTO(mappedProduct);
+        Product updated = productRepository.save(mappedProduct);
+        return mapper.toProductDTO(updated);
     }
 
     @Override
