@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.5</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/> <!-- lookup parent from a repository -->
 	</parent>
 	<groupId>com.gianfranco.sisinv</groupId>
 	<artifactId>inventory-project</artifactId>
@@ -28,6 +28,7 @@
 		<spring-boot.version>3.4.5</spring-boot.version>
 		<spring-cloud.version>2024.0.1</spring-cloud.version>
 		<postgresql.version>42.7.5</postgresql.version>
+		<mockwebserver.version>4.12.0</mockwebserver.version>
 	</properties>
 
 	<dependencyManagement>
@@ -50,6 +51,11 @@
 				<groupId>org.postgresql</groupId>
 				<artifactId>postgresql</artifactId>
 				<version>${postgresql.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.squareup.okhttp3</groupId>
+				<artifactId>mockwebserver</artifactId>
+				<version>${mockwebserver.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
