@@ -36,14 +36,14 @@ public class StockServiceImpl implements IStockService {
 
     @Override
     public StockDTO getStockByProductId(Long productId) {
-        return this.stockRepository.findById(productId).map(mapper::toStockDTO).orElseThrow(
+        return this.stockRepository.findByProductId(productId).map(mapper::toStockDTO).orElseThrow(
                 () -> new IllegalArgumentException("Stock with id " + productId + " not found")
         );
     }
 
     @Override
     public StockMovementsDTO getStockMovementsByProductId(Long productId) {
-        return this.stockRepository.findById(productId).map(mapper::toStockMovementDTO).orElseThrow(
+        return this.stockRepository.findByProductId(productId).map(mapper::toStockMovementDTO).orElseThrow(
                 () -> new IllegalArgumentException("Stock with id " + productId + " not found")
         );
     }
@@ -60,7 +60,7 @@ public class StockServiceImpl implements IStockService {
         }
 
         Movement mappedMovement = mapper.toMovement(movement);
-        Stock stock = this.stockRepository.findById(productId).orElseGet(() -> {
+        Stock stock = this.stockRepository.findByProductId(productId).orElseGet(() -> {
             Stock newStock = new Stock();
             newStock.setProductId(productId);
             return newStock;
