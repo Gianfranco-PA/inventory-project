@@ -41,7 +41,7 @@ public class ProductControllerIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     private static Long createdProductId;
 
