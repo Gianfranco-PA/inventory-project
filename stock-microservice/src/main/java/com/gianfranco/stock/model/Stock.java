@@ -31,6 +31,13 @@ public class Stock {
     public Stock() {
     }
 
+    public Stock(Long id, Long productId, Long quantity, LocalDateTime lastUpdate) {
+        this.id = id;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.lastUpdate = lastUpdate;
+    }
+
     public Stock(Long id, Long productId, List<Movement> movements, Long quantity, LocalDateTime lastUpdate) {
         this.id = id;
         this.productId = productId;
