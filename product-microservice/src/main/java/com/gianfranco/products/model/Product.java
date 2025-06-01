@@ -23,7 +23,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(long id ,String name, String description, Double price) {
+    public Product(Long id ,String name, String description, Double price) {
         this.id = id;
         this.name = name;
         this.description = description;

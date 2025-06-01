@@ -22,7 +22,7 @@ public class Mapper {
 
     public StockDTO toStockDTO(Stock stock) {
         return new StockDTO(
-                stock.getId(),
+                stock.getProductId(),
                 stock.getQuantity(),
                 stock.getLastUpdate());
     }
