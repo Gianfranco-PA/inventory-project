@@ -176,6 +176,8 @@ public class ProductControllerIntegrationTest {
     @Test
     @Order(7)
     void testDeleteProduct() throws Exception {
+        mockStockServer.enqueue(new MockResponse().setResponseCode(204));
+
         mockMvc.perform(delete("/api/product/{id}", createdProductId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Test product-upd"));

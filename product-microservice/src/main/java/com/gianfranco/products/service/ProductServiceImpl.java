@@ -116,11 +116,15 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public ProductDTO deleteProduct(Long id) {
-        Product product = productRepository.findById(id).orElse(null);
-        if (product == null) {
-            throw new IllegalArgumentException("Product with id " + id + " not found");
-        }
+        Product product = productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Product with id " + id + " not found"));
         productRepository.deleteById(id);
+
+        try {
+            stockClient.deleteStock(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Error deleting stock for product " + product.getName(), e);
+        }
+
         return mapper.toProductDTO(product);
     }
 }
