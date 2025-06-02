@@ -69,4 +69,14 @@ public class StockServiceImpl implements IStockService {
         Stock savedStock = this.stockRepository.save(stock);
         return mapper.toStockDTO(savedStock);
     }
+
+    @Override
+    public StockDTO deleteStockByProductId(Long productId) {
+        Stock stock = this.stockRepository.findByProductId(productId).orElseThrow(
+                ()-> new IllegalArgumentException("Stock with id " + productId + " not found")
+        );
+
+        this.stockRepository.delete(stock);
+        return mapper.toStockDTO(stock);
+    }
 }

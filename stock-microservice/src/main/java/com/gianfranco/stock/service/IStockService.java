@@ -14,4 +14,6 @@ public interface IStockService {
     StockMovementsDTO getStockMovementsByProductId(Long productId);
 
     StockDTO addMovement(Long productId, MovementDTO movement);
+
+    StockDTO deleteStockByProductId(Long productId);
 }

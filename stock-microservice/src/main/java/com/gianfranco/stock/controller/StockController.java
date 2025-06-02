@@ -109,4 +109,24 @@ public class StockController {
     }
 
 
+    @Operation(
+            summary = "Eliminar todo el stock de un producto",
+            description = "Elimina el registro de stock (y sus movimientos) asociado al producto indicado",
+            parameters = {
+                    @Parameter(name = "id", description = "ID del producto cuyo stock se eliminará", required = true, in = ParameterIn.PATH, schema = @Schema(type = "integer", example = "1"))
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Stock eliminado exitosamente",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = StockDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "Stock no encontrado para el producto indicado"),
+                    @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+            }
+    )
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteStockByProductId(@PathVariable Long id) {
+        StockDTO stock = stockService.deleteStockByProductId(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

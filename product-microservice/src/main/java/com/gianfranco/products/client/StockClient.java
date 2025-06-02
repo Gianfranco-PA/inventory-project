@@ -33,4 +33,8 @@ public class StockClient {
     public StockMovementsDTO getMovements(Long productId) {
         return restTemplate.getForObject(url + "/{id}/movements", StockMovementsDTO.class, productId);
     }
+
+    public void deleteStock(Long productId) {
+        restTemplate.delete(url + "/{id}", productId);
+    }
 }

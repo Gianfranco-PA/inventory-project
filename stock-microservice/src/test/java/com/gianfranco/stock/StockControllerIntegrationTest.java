@@ -115,6 +115,16 @@ public class StockControllerIntegrationTest {
 
     @Test
     @Order(5)
+    void testDeleteStockByProductId() throws Exception {
+        mockMvc.perform(delete("/api/stock/{id}", 1))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/api/stock/{id}", 1))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Order(6)
     void testAddMovementWhenProductNotExistsReturnsNotFound() throws Exception {
         mockProductServer.enqueue(new MockResponse().setResponseCode(404));
 

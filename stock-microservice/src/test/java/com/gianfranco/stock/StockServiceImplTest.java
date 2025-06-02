@@ -152,4 +152,27 @@ public class StockServiceImplTest {
 		RuntimeException ex = assertThrows(RuntimeException.class, () -> service.addMovement(1L, movementDTO));
 		assertEquals("Error getting product with id 1", ex.getMessage());
 	}
+
+	@Test
+	void testDeleteStockByProductIdWhenExists() {
+		Stock existing = new Stock(5L, 5L, 50L, FIXED_TIME);
+		when(repository.findByProductId(5L)).thenReturn(Optional.of(existing));
+
+		StockDTO result = service.deleteStockByProductId(5L);
+
+		assertEquals(result.productId(), existing.getProductId());
+
+		verify(repository).delete(existing);
+	}
+
+	@Test
+	void testDeleteStockByProductIdWhenNotExists() {
+		when(repository.findByProductId(99L)).thenReturn(Optional.empty());
+
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> service.deleteStockByProductId(99L));
+
+		assertEquals("Stock with id 99 not found", ex.getMessage());
+
+		verify(repository, never()).delete(any());
+	}
 }
