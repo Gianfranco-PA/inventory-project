@@ -34,8 +34,10 @@ El flujo de trabajo se organiza de la siguiente manera:
      - `GET /api/product/{id}/stock`: Consulta el stock actual de un producto llamando a `/api/stock/{id}`.
      - `GET /api/product/{id}/track`: Consulta la trazabilidad de un producto llamando a `/api/stock/{id}/movements`.
      - `PUT /api/product/{id}`: Actualiza los datos de un producto existente.
-     - `DELETE /api/product/{id}`: Elimina un producto (no afecta registros de stock).
-
+     - `DELETE /api/product/{id}`: Elimina un producto y devuelve los datos eliminados.
+       - Elimina el registro del producto indicado
+       - Llama a `StockClient` para eliminar el stock del producto indicado.
+       - Retorna `ProductDTO` (info de producto indicado).
    - **Configuraciones**:
      - **OpenApiConfig**: Anotaciones de `@OpenAPIDefinition` para exponer documentación Swagger UI (por defecto en `/swagger-ui.html`).
      - **RestConfig**: Configura `RestTemplateBuilder` con timeouts para llamadas al Stock Service.
@@ -79,6 +81,7 @@ El flujo de trabajo se organiza de la siguiente manera:
        - Verifica existencia del producto llamando a `ProductClient`.  
        - Si existe, obtiene (o crea) registro `Stock` y agrega movimiento.  
        - Actualiza `quantity` automáticamente y registra `lastUpdate`.
+     - `DELETE /api/stock/{id}`: Elimina el registro de stock (y todos sus movimientos) asociado al producto indicado.
 
    - **Configuraciones**:
      - **OpenApiConfig**: Documentación Swagger UI para Stock Service.
